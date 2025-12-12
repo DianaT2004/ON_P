@@ -1,4 +1,7 @@
 {
+  "name": "onp",
+  "version": "1.0.0",
+  "private": true,
   "dependencies": {
     "framer-motion": "^12.23.26",
     "zustand": "^5.0.9"
