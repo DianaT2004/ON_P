@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function DriverLoadsPage() {
-  const { user, logout, upgradeToPremium } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const { loads, expressInterest, myInterestedLoads } = useLoadsStore();
 
   const availableLoads = loads.filter(load => load.status === 'active');
@@ -41,9 +41,9 @@ export default function DriverLoadsPage() {
             </div>
             
             <div className="flex items-center gap-3">
-              {!user?.isPremium && (
+              {(user?.subscription === 'free') && (
                 <motion.button
-                  onClick={upgradeToPremium}
+                  onClick={() => window.location.href = '/subscription'}
                   className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-600 text-white rounded-lg hover:from-yellow-600 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl font-semibold text-sm"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -52,10 +52,10 @@ export default function DriverLoadsPage() {
                   Upgrade to Premium
                 </motion.button>
               )}
-              {user?.isPremium && (
+              {(user?.subscription === 'pro' || user?.subscription === 'premium') && (
                 <span className="premium-badge">
                   <Crown className="w-3 h-3" />
-                  Premium
+                  {user.subscription === 'premium' ? 'Premium' : 'Pro'}
                 </span>
               )}
               <button
@@ -196,7 +196,7 @@ export default function DriverLoadsPage() {
                         animate={{ opacity: 1, height: 'auto' }}
                         className="mb-4 p-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg border border-gray-200"
                       >
-                        {user?.isPremium ? (
+                        {(user?.subscription === 'pro' || user?.subscription === 'premium') ? (
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                               <Users className="w-4 h-4 text-purple-600" />
@@ -220,7 +220,7 @@ export default function DriverLoadsPage() {
                               </p>
                             </div>
                             <motion.button
-                              onClick={upgradeToPremium}
+                              onClick={() => window.location.href = '/subscription'}
                               className="text-xs text-purple-600 hover:text-purple-700 font-semibold flex items-center gap-1"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}

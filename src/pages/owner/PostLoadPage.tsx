@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import OwnerLayout from './OwnerLayout';
 import { useAuthStore } from '../../stores/authStore';
 import { useLoadsStore } from '../../stores/loadsStore';
 import { ArrowLeft, Package } from 'lucide-react';
@@ -40,8 +41,9 @@ export default function PostLoadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50 p-4 sm:p-8">
-      <div className="max-w-3xl mx-auto">
+    <OwnerLayout>
+      <div className="p-6">
+        <div className="max-w-3xl mx-auto">
         <button 
           onClick={() => navigate('/owner/dashboard')}
           className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
@@ -220,7 +222,8 @@ export default function PostLoadPage() {
             <li>✓ Assign a driver and manage the delivery</li>
           </ul>
         </motion.div>
+        </div>
       </div>
-    </div>
+    </OwnerLayout>
   );
 }

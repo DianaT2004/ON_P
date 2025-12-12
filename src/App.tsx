@@ -1,29 +1,38 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/authStore';
 
-// Pages
-import LoginPage from './pages/LoginPage';
-import OwnerDashboard from './pages/owner/OwnerDashboard';
-import LoadDetailPage from './pages/owner/LoadDetailPage';
+// Login Pages
+import DriverLoginPage from './pages/DriverLoginPage';
+import OwnerLoginPage from './pages/OwnerLoginPage';
+
+// Main Pages (Driver)
+import LoadsFeedPage from './pages/LoadsFeedPage';
+import ServicesPage from './pages/ServicesPage';
+import DocumentsPage from './pages/DocumentsPage';
+import MapsPage from './pages/MapsPage';
+import ChatPage from './pages/ChatPage';
+import SettingsPage from './pages/SettingsPage';
+import SubscriptionPage from './pages/SubscriptionPage';
+
+// Owner Pages
+import OwnerDashboardPage from './pages/owner/OwnerDashboardPage';
+import OwnerDriversPage from './pages/owner/OwnerDriversPage';
+import OwnerAnalyticsPage from './pages/owner/OwnerAnalyticsPage';
+import OwnerChatPage from './pages/owner/OwnerChatPage';
+import OwnerDocumentsPage from './pages/owner/OwnerDocumentsPage';
+import OwnerMapsPage from './pages/owner/OwnerMapsPage';
+import OwnerSettingsPage from './pages/owner/OwnerSettingsPage';
 import PostLoadPage from './pages/owner/PostLoadPage';
-import DriverLoadsPage from './pages/driver/DriverLoadsPage';
 
 function ProtectedRoute({ 
-  children, 
-  allowedRole 
+  children 
 }: { 
-  children: React.ReactNode; 
-  allowedRole?: 'driver' | 'owner';
+  children: React.ReactNode;
 }) {
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  if (allowedRole && user?.role !== allowedRole) {
-    const redirectPath = user?.role === 'driver' ? '/driver/loads' : '/owner/dashboard';
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to="/login/driver" replace />;
   }
   
   return <>{children}</>;
@@ -35,18 +44,78 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
-        <Route path="/login" element={<LoginPage />} />
+        {/* Login Routes */}
+        <Route path="/login/driver" element={<DriverLoginPage />} />
+        <Route path="/login/owner" element={<OwnerLoginPage />} />
+        <Route path="/login" element={<Navigate to="/login/driver" replace />} />
         
-        {/* Root redirect based on role */}
+        {/* Root redirect */}
         <Route 
           path="/" 
           element={
-            user?.role === 'driver' 
-              ? <Navigate to="/driver/loads" replace /> 
-              : user?.role === 'owner'
-              ? <Navigate to="/owner/dashboard" replace />
-              : <Navigate to="/login" replace />
+            user 
+              ? user.role === 'owner'
+                ? <Navigate to="/owner/dashboard" replace />
+                : <Navigate to="/loads" replace />
+              : <Navigate to="/login/driver" replace />
+          } 
+        />
+
+        {/* Protected Routes */}
+        <Route 
+          path="/loads" 
+          element={
+            <ProtectedRoute>
+              <LoadsFeedPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/services" 
+          element={
+            <ProtectedRoute>
+              <ServicesPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/documents" 
+          element={
+            <ProtectedRoute>
+              <DocumentsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/maps" 
+          element={
+            <ProtectedRoute>
+              <MapsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/chat" 
+          element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/settings" 
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/subscription" 
+          element={
+            <ProtectedRoute>
+              <SubscriptionPage />
+            </ProtectedRoute>
           } 
         />
 
@@ -54,34 +123,64 @@ export default function App() {
         <Route 
           path="/owner/dashboard" 
           element={
-            <ProtectedRoute allowedRole="owner">
-              <OwnerDashboard />
+            <ProtectedRoute>
+              <OwnerDashboardPage />
             </ProtectedRoute>
           } 
         />
         <Route 
-          path="/owner/load/:loadId" 
+          path="/owner/drivers" 
           element={
-            <ProtectedRoute allowedRole="owner">
-              <LoadDetailPage />
+            <ProtectedRoute>
+              <OwnerDriversPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/owner/analytics" 
+          element={
+            <ProtectedRoute>
+              <OwnerAnalyticsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/owner/chat" 
+          element={
+            <ProtectedRoute>
+              <OwnerChatPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/owner/documents" 
+          element={
+            <ProtectedRoute>
+              <OwnerDocumentsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/owner/maps" 
+          element={
+            <ProtectedRoute>
+              <OwnerMapsPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/owner/settings" 
+          element={
+            <ProtectedRoute>
+              <OwnerSettingsPage />
             </ProtectedRoute>
           } 
         />
         <Route 
           path="/owner/post-load" 
           element={
-            <ProtectedRoute allowedRole="owner">
+            <ProtectedRoute>
               <PostLoadPage />
-            </ProtectedRoute>
-          } 
-        />
-
-        {/* Driver Routes */}
-        <Route 
-          path="/driver/loads" 
-          element={
-            <ProtectedRoute allowedRole="driver">
-              <DriverLoadsPage />
             </ProtectedRoute>
           } 
         />
