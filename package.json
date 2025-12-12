@@ -2,5 +2,16 @@
   "dependencies": {
     "framer-motion": "^12.23.26",
     "zustand": "^5.0.9"
+  },
+  "scripts": {
+    "build": "your-build-command-here"
+  }
+}{
+  "dependencies": {
+    "framer-motion": "^12.23.26",
+    "zustand": "^5.0.9"
+  },
+  "scripts": {
+    "build": "your-build-command-here"
   }
 }
