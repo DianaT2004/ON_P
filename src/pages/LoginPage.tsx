@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAuthStore, DEMO_USERS } from '../stores/authStore';
-import { Truck, Building2, Sparkles, Loader2 } from 'lucide-react';
+import { Truck, Building2, Sparkles, Loader2, Zap, Shield, TrendingUp } from 'lucide-react';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -23,178 +23,255 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-red-50 to-orange-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-white via-red-50 to-red-100 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-20 left-10 w-72 h-72 bg-red-200 rounded-full mix-blend-multiply filter blur-xl opacity-20"
+          animate={{
+            x: [0, 100, 0],
+            y: [0, 50, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-72 h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-20"
+          animate={{
+            x: [0, -100, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+      </div>
+
       <motion.div
-        className="w-full max-w-md"
+        className="w-full max-w-5xl relative z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Logo */}
-        <div className="text-center mb-8">
+        {/* Logo Section */}
+        <div className="text-center mb-12">
           <motion.div
             animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="mb-4"
           >
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">OnPoint</h1>
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent mb-2">
+              OnPoint
+            </h1>
+            <div className="flex items-center justify-center gap-2 text-red-600">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles className="w-5 h-5" />
+              </motion.div>
+              <p className="text-lg font-semibold">AI-Powered Logistics Marketplace</p>
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles className="w-5 h-5" />
+              </motion.div>
+            </div>
           </motion.div>
-          <p className="text-gray-600">AI-Powered Logistics Marketplace</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Welcome Back
-          </h2>
-          <p className="text-gray-600 text-center mb-8">
-            Choose your account type to continue
-          </p>
-
-          <AnimatePresence mode="wait">
-            {!selectedRole ? (
-              <motion.div
-                key="role-selection"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="space-y-4"
-              >
-                {/* Driver Option */}
-                <motion.button
-                  onClick={() => setSelectedRole('driver')}
-                  className="w-full p-6 rounded-xl border-2 border-gray-200 hover:border-red-500 hover:bg-red-50 transition-all duration-300 group"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+        {/* Two Column Layout for Driver and Owner */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Driver Section */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="relative"
+          >
+            <motion.div
+              className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border-2 border-red-100 hover:border-red-300 transition-all h-full"
+              whileHover={{ scale: 1.02, y: -5 }}
+            >
+              <div className="flex flex-col items-center text-center mb-6">
+                <motion.div
+                  className="w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center mb-4 shadow-lg"
+                  animate={{ 
+                    boxShadow: [
+                      "0 0 0 0 rgba(239, 68, 68, 0.7)",
+                      "0 0 0 10px rgba(239, 68, 68, 0)",
+                      "0 0 0 0 rgba(239, 68, 68, 0)"
+                    ]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Truck className="w-8 h-8 text-white" />
-                    </div>
-                    <div className="text-left flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors">
-                        I'm a Driver
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Find loads and manage deliveries
-                      </p>
-                    </div>
-                    <Sparkles className="w-6 h-6 text-gray-400 group-hover:text-red-500 transition-colors" />
-                  </div>
-                </motion.button>
+                  <Truck className="w-12 h-12 text-white" />
+                </motion.div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">I'm a Driver</h2>
+                <p className="text-gray-600 mb-6">Find loads and manage deliveries</p>
+              </div>
 
-                {/* Owner Option */}
-                <motion.button
-                  onClick={() => setSelectedRole('owner')}
-                  className="w-full p-6 rounded-xl border-2 border-gray-200 hover:border-orange-500 hover:bg-orange-50 transition-all duration-300 group"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Building2 className="w-8 h-8 text-white" />
+              <div className="space-y-3 mb-6">
+                {[
+                  { icon: Zap, text: 'Find loads instantly' },
+                  { icon: TrendingUp, text: 'Best rates guaranteed' },
+                  { icon: Shield, text: 'Verified load owners' },
+                ].map((feature, index) => (
+                  <motion.div
+                    key={feature.text}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                    className="flex items-center gap-3 text-gray-700"
+                  >
+                    <div className="p-2 rounded-lg bg-red-50">
+                      <feature.icon className="w-5 h-5 text-red-600" />
                     </div>
-                    <div className="text-left flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
-                        I'm a Load Owner
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Post loads and find drivers
-                      </p>
-                    </div>
-                    <Sparkles className="w-6 h-6 text-gray-400 group-hover:text-orange-500 transition-colors" />
-                  </div>
-                </motion.button>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="confirmation"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="space-y-6"
+                    <span className="text-sm font-medium">{feature.text}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.button
+                onClick={() => {
+                  setSelectedRole('driver');
+                  setTimeout(() => handleLogin('driver'), 500);
+                }}
+                disabled={isLoading}
+                className="w-full py-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                whileHover={{ scale: isLoading ? 1 : 1.05 }}
+                whileTap={{ scale: isLoading ? 1 : 0.95 }}
               >
-                <div className={`p-4 rounded-lg ${selectedRole === 'driver' ? 'bg-red-50 border-2 border-red-200' : 'bg-orange-50 border-2 border-orange-200'}`}>
-                  <div className="flex items-center gap-3">
-                    {selectedRole === 'driver' ? (
-                      <>
-                        <Truck className="w-6 h-6 text-red-600" />
-                        <div>
-                          <p className="font-semibold text-red-900">Driver Account</p>
-                          <p className="text-sm text-red-700">Access loads and routes</p>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <Building2 className="w-6 h-6 text-orange-600" />
-                        <div>
-                          <p className="font-semibold text-orange-900">Load Owner Account</p>
-                          <p className="text-sm text-orange-700">Manage shipments</p>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
+                {isLoading && selectedRole === 'driver' ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    Continue as Driver
+                    <Sparkles className="w-5 h-5" />
+                  </>
+                )}
+              </motion.button>
 
-                <div className="space-y-3">
-                  <button
-                    onClick={() => handleLogin(selectedRole)}
-                    disabled={isLoading}
-                    className={`w-full h-12 rounded-lg font-semibold transition-all duration-300 ${
-                      selectedRole === 'driver'
-                        ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700'
-                        : 'bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700'
-                    } text-white shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2`}
+              <div className="mt-4 text-center">
+                <p className="text-xs text-gray-500">Demo: driver@onpoint.ge</p>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Owner Section */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="relative"
+          >
+            <motion.div
+              className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border-2 border-orange-100 hover:border-orange-300 transition-all h-full"
+              whileHover={{ scale: 1.02, y: -5 }}
+            >
+              <div className="flex flex-col items-center text-center mb-6">
+                <motion.div
+                  className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center mb-4 shadow-lg"
+                  animate={{ 
+                    boxShadow: [
+                      "0 0 0 0 rgba(249, 115, 22, 0.7)",
+                      "0 0 0 10px rgba(249, 115, 22, 0)",
+                      "0 0 0 0 rgba(249, 115, 22, 0)"
+                    ]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                >
+                  <Building2 className="w-12 h-12 text-white" />
+                </motion.div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">I'm a Load Owner</h2>
+                <p className="text-gray-600 mb-6">Post loads and find drivers</p>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                {[
+                  { icon: Zap, text: 'AI-powered matching' },
+                  { icon: TrendingUp, text: 'Financial analytics' },
+                  { icon: Shield, text: 'Driver reviews & ratings' },
+                ].map((feature, index) => (
+                  <motion.div
+                    key={feature.text}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + index * 0.1 }}
+                    className="flex items-center gap-3 text-gray-700"
                   >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Signing in...
-                      </>
-                    ) : (
-                      'Continue with Demo Account'
-                    )}
-                  </button>
+                    <div className="p-2 rounded-lg bg-orange-50">
+                      <feature.icon className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <span className="text-sm font-medium">{feature.text}</span>
+                  </motion.div>
+                ))}
+              </div>
 
-                  <button
-                    onClick={() => setSelectedRole(null)}
-                    className="w-full text-sm text-gray-600 hover:text-gray-900 underline"
-                  >
-                    Change account type
-                  </button>
-                </div>
+              <motion.button
+                onClick={() => {
+                  setSelectedRole('owner');
+                  setTimeout(() => handleLogin('owner'), 500);
+                }}
+                disabled={isLoading}
+                className="w-full py-4 bg-gradient-to-r from-orange-500 to-red-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                whileHover={{ scale: isLoading ? 1 : 1.05 }}
+                whileTap={{ scale: isLoading ? 1 : 0.95 }}
+              >
+                {isLoading && selectedRole === 'owner' ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    Continue as Owner
+                    <Sparkles className="w-5 h-5" />
+                  </>
+                )}
+              </motion.button>
 
-                <div className={`p-4 ${selectedRole === 'driver' ? 'bg-red-50' : 'bg-orange-50'} rounded-lg`}>
-                  <p className="text-sm font-semibold text-gray-900 mb-2">Demo Account:</p>
-                  <p className="text-xs text-gray-700">
-                    Email: {selectedRole === 'driver' ? 'driver@onpoint.ge' : 'owner@onpoint.ge'}
-                  </p>
-                  <p className="text-xs text-gray-700">
-                    Password: demo123
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              <div className="mt-4 text-center">
+                <p className="text-xs text-gray-500">Demo: owner@onpoint.ge</p>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
 
-        {/* Features */}
-        <div className="mt-8 grid grid-cols-3 gap-4 text-center">
+        {/* Features Footer */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-12 grid grid-cols-3 gap-6 text-center"
+        >
           {[
-            { icon: '🤖', label: 'AI Matching' },
-            { icon: '⚡', label: 'Real-time' },
-            { icon: '💰', label: 'Best Rates' },
+            { icon: '🤖', label: 'AI Matching', desc: 'Smart driver selection' },
+            { icon: '⚡', label: 'Real-time', desc: 'Live updates' },
+            { icon: '💰', label: 'Best Rates', desc: 'Competitive pricing' },
           ].map((feature, index) => (
             <motion.div
               key={feature.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-              className="text-white"
+              transition={{ delay: 0.7 + index * 0.1 }}
+              className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-red-100"
             >
-              <div className="text-3xl mb-1">{feature.icon}</div>
-              <p className="text-xs font-medium text-gray-700">{feature.label}</p>
+              <div className="text-4xl mb-2">{feature.icon}</div>
+              <p className="font-bold text-gray-900 text-sm">{feature.label}</p>
+              <p className="text-xs text-gray-600 mt-1">{feature.desc}</p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );
